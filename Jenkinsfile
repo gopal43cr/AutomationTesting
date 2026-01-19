@@ -11,7 +11,7 @@ pipeline {
         stage('Clean and Test') {
             steps {
                 echo 'Building and Testing...'
-                bat 'mvn clean test -f HandsOnAutomationTest/pom.xml'
+                bat 'mvn clean test'
             }
         }
     }
