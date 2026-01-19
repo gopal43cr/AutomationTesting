@@ -1,0 +1,15 @@
+{
+  "firstName": "Gopal",
+  "lastName": "Das",
+  "day": "5",
+  "month": "4",
+  "year": "2000",
+  "company": "IBM",
+  "address1": "purba surendra nagar",
+  "address2": "kolkata",
+  "country": "India",
+  "state": "West Bengal",
+  "city": "Kolkata",
+  "zipcode": "743383",
+  "mobileNumber": "1234567898"
+}
