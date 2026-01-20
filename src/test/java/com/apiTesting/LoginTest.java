@@ -1,94 +1,67 @@
 package com.apiTesting;
 
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.http.Method;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
 public class LoginTest {
-	 @Test
-	    public void postToVerifyLoginWithValidDetails() {
-	    	
-	    	System.out.println("Verify Login with Valid Details");
-	        RestAssured.baseURI = "https://automationexercise.com/api";
 
-	        RequestSpecification httpReq = RestAssured.given()
-	                                        .contentType(ContentType.URLENC)
-	                                        .formParam("email", "harshikasingh0312@gmail.com")
-	                                        .formParam("password", "Harshika26");
+    //POST To Verify Login with valid details
+    @Test
+    public void postToVerifyLoginWithValidDetails() {
+        RestAssured.given()
+                .baseUri("https://automationexercise.com/api")
+                .contentType(ContentType.URLENC)
+                .formParam("email", "harshikasingh0312@gmail.com")
+                .formParam("password", "Harshika26")
+        .when()
+                .post("/verifyLogin")
+        .then()
+                .statusCode(200)
+                .body(notNullValue()); // message: User exists!
+    }
 
-	        Response res = httpReq.request(Method.POST, "/verifyLogin");
+    // POST To Verify Login without email parameter
+    @Test
+    public void postToVerifyLoginWithoutEmail() {
+        RestAssured.given()
+                .baseUri("https://automationexercise.com/api")
+                .contentType(ContentType.URLENC)
+                .formParam("password", "test123")
+        .when()
+                .post("/verifyLogin")
+        .then()
+                .statusCode(400)
+                .body(notNullValue()); // message: Bad request, email or password missing
+    }
 
-	        String jsonPretty = res.jsonPath().prettify();
-	        System.out.println(jsonPretty);
+    // DELETE To Verify Login
+    @Test
+    public void deleteVerifyLogin() {
+        RestAssured.given()
+                .baseUri("https://automationexercise.com/api")
+        .when()
+                .delete("/verifyLogin")
+        .then()
+                .statusCode(405)
+                .body(notNullValue()); // message: This request method is not supported
+    }
 
-	        // Print status code
-	        System.out.println("Status Code: " + res.getStatusCode());
-	        System.out.println("-------------------------------------------------------------------------");
-	    }
-	    @Test
-	    public void postToVerifyLoginWithoutEmail() {
-	    	
-	    	System.out.println("Verify Login without Email");
-	        RestAssured.baseURI = "https://automationexercise.com/api";
-
-	        // Only password is sent, email is missing
-	        RequestSpecification httpReq = RestAssured.given()
-	                                        .contentType(ContentType.URLENC)
-	                                        .formParam("password", "test123");
-
-	        Response res = httpReq.request(Method.POST, "/verifyLogin");
-
-	        // Print full response
-	        String jsonPretty = res.jsonPath().prettify();
-	        System.out.println(jsonPretty);
-
-	        // Print status code
-	        System.out.println("Status Code: " + res.getStatusCode());
-	        System.out.println("-------------------------------------------------------------------------");
-	    }
-	    @Test
-	    public void deleteVerifyLogin() {
-	    	
-	    	System.out.println("Delete to Verify Login");
-	        RestAssured.baseURI = "https://automationexercise.com/api";
-
-	        RequestSpecification httpReq = RestAssured.given();
-
-	        // Send DELETE request
-	        Response res = httpReq.request(Method.DELETE, "/verifyLogin");
-
-	        // Print full response
-	        String jsonPretty = res.jsonPath().prettify();
-	        System.out.println(jsonPretty);
-
-	        // Print status code
-	        System.out.println("Status Code: " + res.getStatusCode());
-	        System.out.println("-------------------------------------------------------------------------");
-	    }
-	    @Test
-	    public void postToVerifyLoginWithInvalidDetails() {
-
-	    	System.out.println(" Verify Login with invalid details");
-	        RestAssured.baseURI = "https://automationexercise.com/api";
-
-	        // Send invalid credentials
-	        RequestSpecification httpReq = RestAssured.given()
-	                                        .contentType(ContentType.URLENC)
-	                                        .formParam("email", "invalid@example.com")
-	                                        .formParam("password", "wrongpass");
-
-	        Response res = httpReq.request(Method.POST, "/verifyLogin");
-
-	        // Print full response
-	        String jsonPretty = res.jsonPath().prettify();
-	        System.out.println(jsonPretty);
-
-	        // Print status code
-	        System.out.println("Status Code: " + res.getStatusCode());
-	        System.out.println("-------------------------------------------------------------------------");
-	    }
+    // POST To Verify Login with invalid details
+    @Test
+    public void postToVerifyLoginWithInvalidDetails() {
+        RestAssured.given()
+                .baseUri("https://automationexercise.com/api")
+                .contentType(ContentType.URLENC)
+                .formParam("email", "invalid@example.com")
+                .formParam("password", "wrongpass")
+        .when()
+                .post("/verifyLogin")
+        .then()
+                .statusCode(404)
+                .body(notNullValue()); // message: User not found
+    }
 }
