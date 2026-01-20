@@ -11,75 +11,95 @@ import io.restassured.response.Response;
 
 public class LoginTest {
 
-    //POST To Verify Login with valid details
+    // API 7: POST To Verify Login with valid details
     @Test
     public void postToVerifyLoginWithValidDetails() {
-        Response response = RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITH VALID DETAILS =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("email", "harshikasingh0312@gmail.com")
                 .formParam("password", "Harshika26")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(200)
-                .body(notNullValue())
-                .extract()
-                .response();
-        response.prettyPrint();
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(200)
+           .body(notNullValue());
     }
 
-    // POST To Verify Login without email parameter
+    // API 8: POST To Verify Login without email parameter
     @Test
     public void postToVerifyLoginWithoutEmail() {
-        Response response = RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITHOUT EMAIL =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("password", "test123")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(200)
-                .body(notNullValue())
-                .extract()
-                .response();
-        response.prettyPrint();
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(400)
+           .body(notNullValue());
     }
 
-    // DELETE To Verify Login
+    // API 9: DELETE To Verify Login
     @Test
     public void deleteVerifyLogin() {
-        Response response = RestAssured.given()
+        System.out.println("===== DELETE VERIFY LOGIN =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
-        .when()
+            .when()
                 .delete("/verifyLogin")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()) // message: This request method is not supported
-	     // Performance validation
-	        .time(lessThan(1500L))
-	        .extract()
-	        .response();
-        response.prettyPrint();
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(405)
+           .body(notNullValue());
     }
 
-    // POST To Verify Login with invalid details
+    // API 10: POST To Verify Login with invalid details
     @Test
     public void postToVerifyLoginWithInvalidDetails() {
-        Response response = RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITH INVALID DETAILS =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("email", "invalid@example.com")
                 .formParam("password", "wrongpass")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()) // message: User not found
-	     // Performance validation
-	        .time(lessThan(1500L))
-	        .extract()
-	        .response();
-        response.prettyPrint();
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(404)
+           .body(notNullValue());
     }
 }

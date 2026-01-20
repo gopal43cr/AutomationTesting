@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite" verbose="2">
-    <test name="Test">
+<suite name="AutomationExercise_API_Suite" verbose="1" parallel="false">
+
+    <test name="API Test Execution">
+
         <classes>
+            <!-- Product Search APIs -->
             <class name="com.apiTesting.BrandListTest"/>
+            <class name="com.apiTesting.ProductListTest"/>
+            <class name="com.apiTesting.SearchProduct"/>
             <class name="com.apiTesting.LoginTest"/>
             <class name="com.apiTesting.OperationsOnAccountTest"/>
-            <class name="com.apiTesting.ProductsListTest"/>
-            <class name="com.apiTesting.SearchProduct"/>
         </classes>
+
     </test>
+
 </suite>

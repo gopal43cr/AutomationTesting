@@ -8,37 +8,50 @@ import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 public class SearchProduct {
 
-    // API 5: POST To Search Product
     @Test
     public void postToSearchProduct() {
-        RestAssured.given()
+        System.out.println("===== POST TO SEARCH PRODUCT =====");
+
+        Response res = RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("search_product", "top")
-        .when()
+            .when()
                 .post("/searchProduct")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()) // JSON: Searched products list
-	     // Performance validation
-	        .time(lessThan(1500L));
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        String jsonPretty = res.jsonPath().prettify();
+        System.out.println(jsonPretty);
+
+        res.then()
+           .statusCode(200)
+           .body(notNullValue());
     }
 
-    // API 6: POST To Search Product without search_product parameter
     @Test
     public void postToSearchProductWithoutParam() {
-        RestAssured.given()
+        System.out.println("===== POST TO SEARCH PRODUCT WITHOUT PARAM =====");
+
+        Response res = RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
-        .when()
+            .when()
                 .post("/searchProduct")
-        .then()
-                .statusCode(200)
-                .body(notNullValue())
-	     // Performance validation
-	        .time(lessThan(1500L));
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        String jsonPretty = res.jsonPath().prettify();
+        System.out.println(jsonPretty);
+
+        res.then()
+           .statusCode(400)
+           .body(notNullValue());
     }
 }

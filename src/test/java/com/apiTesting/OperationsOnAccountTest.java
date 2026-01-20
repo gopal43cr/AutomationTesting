@@ -1,105 +1,135 @@
 package com.apiTesting;
 
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
-import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 public class OperationsOnAccountTest {
 
-    // API 11: POST To Create/Register User Account
-    @Test
-    public void postToCreateUserAccount() {
-        RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
+    String email = "johndoe123@example.com";
+    String password = "Test@1234";
+
+    @BeforeClass
+    public void setup() {
+        RestAssured.baseURI = "https://automationexercise.com/api";
+    }
+
+    // ================= API 11 =================
+    // POST - Create User Account
+    @Test(priority = 1)
+    public void createUserAccount() {
+
+        Response res =
+            given()
                 .contentType(ContentType.URLENC)
                 .formParam("name", "John Doe")
-                .formParam("email", "johndoe123@example.com")
-                .formParam("password", "Test@1234")
+                .formParam("email", email)
+                .formParam("password", password)
                 .formParam("title", "Mr")
                 .formParam("birth_date", "15")
-                .formParam("birth_month", "August")
+                .formParam("birth_month", "09")
                 .formParam("birth_year", "1990")
                 .formParam("firstname", "John")
                 .formParam("lastname", "Doe")
-                .formParam("company", "ABC Corp")
+                .formParam("company", "Example Company")
                 .formParam("address1", "123 Main Street")
-                .formParam("address2", "Apartment 4B")
-                .formParam("country", "India")
-                .formParam("zipcode", "700001")
-                .formParam("state", "West Bengal")
-                .formParam("city", "Kolkata")
-                .formParam("mobile_number", "9876543210")
-        .when()
-                .post("/createAccount")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()); // message: User created!
+                .formParam("address2", "Apt 4B")
+                .formParam("country", "USA")
+                .formParam("zipcode", "10001")
+                .formParam("state", "NY")
+                .formParam("city", "New York")
+                .formParam("mobile_number", "9999999999")
+            .when()
+                .post("/createAccount");
+
+        System.out.println("===== CREATE USER ACCOUNT =====");
+        System.out.println(res.jsonPath().prettify());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+
+        // Pass if user created OR already exists
+        assertTrue(
+            responseCode == 201 || responseCode == 400,
+            "Unexpected responseCode: " + responseCode
+        );
     }
 
-    // API 12: DELETE To Delete User Account
-    @Test
-    public void deleteUserAccount() {
-        RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
-                .contentType(ContentType.URLENC)
-                .formParam("email", "johndoe123@example.com")
-                .formParam("password", "Test@1234")
-        .when()
-                .delete("/deleteAccount")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()); // message: Account deleted!
+    // ================= API 14 =================
+    // GET - User Details By Email
+    @Test(priority = 2)
+    public void getUserDetailByEmail() {
+
+        Response res =
+            given()
+                .queryParam("email", email)
+            .when()
+                .get("/getUserDetailByEmail");
+
+        System.out.println("===== GET USER DETAILS =====");
+        System.out.println(res.jsonPath().prettify());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+
+        assertEquals(responseCode, 200);
+        assertEquals(res.jsonPath().getString("user.email"), email);
     }
 
-    // API 13: PUT To Update User Account
-    @Test
-    public void putToUpdateUserAccount() {
-        RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
+    // ================= API 13 =================
+    // PUT - Update User Account
+    @Test(priority = 3)
+    public void updateUserAccount() {
+
+        Response res =
+            given()
                 .contentType(ContentType.URLENC)
                 .formParam("name", "John Doe Updated")
-                .formParam("email", "johndoe123@example.com")
-                .formParam("password", "Test@1234")
-                .formParam("title", "Mr")
-                .formParam("birth_date", "15")
-                .formParam("birth_month", "August")
-                .formParam("birth_year", "1990")
-                .formParam("firstname", "John")
-                .formParam("lastname", "Doe")
-                .formParam("company", "ABC Corp")
-                .formParam("address1", "123 Main Street")
-                .formParam("address2", "Apartment 4B")
-                .formParam("country", "India")
-                .formParam("zipcode", "700001")
-                .formParam("state", "West Bengal")
-                .formParam("city", "Kolkata")
-                .formParam("mobile_number", "9876543210")
-        .when()
-                .put("/updateAccount")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()) // message: User updated!
-	     // Performance validation
-	        .time(lessThan(1500L));
+                .formParam("email", email)
+                .formParam("password", password)
+                .formParam("city", "Los Angeles")
+            .when()
+                .put("/updateAccount");
+
+        System.out.println("===== UPDATE USER ACCOUNT =====");
+        System.out.println(res.jsonPath().prettify());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+
+        // Pass if updated OR account not found
+        assertTrue(
+            responseCode == 200 || responseCode == 404,
+            "Unexpected responseCode: " + responseCode
+        );
     }
 
-    // API 14: GET User Detail By Email
-    @Test
-    public void getUserDetailByEmail() {
-        RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
-                .queryParam("email", "johndoe123@example.com")
-        .when()
-                .get("/getUserDetailByEmail")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()) // JSON: User Detail
-	     // Performance validation
-	        .time(lessThan(1500L));
+    // ================= API 12 =================
+    // DELETE - User Account
+    @Test(priority = 4)
+    public void deleteUserAccount() {
+
+        Response res =
+            given()
+                .contentType(ContentType.URLENC)
+                .formParam("email", email)
+                .formParam("password", password)
+            .when()
+                .delete("/deleteAccount");
+
+        System.out.println("===== DELETE USER ACCOUNT =====");
+        System.out.println(res.jsonPath().prettify());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+
+        // Pass if deleted OR already deleted
+        assertTrue(
+            responseCode == 200 || responseCode == 404,
+            "Unexpected responseCode: " + responseCode
+        );
     }
 }

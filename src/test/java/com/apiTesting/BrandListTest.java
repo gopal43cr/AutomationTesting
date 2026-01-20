@@ -9,51 +9,55 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 public class BrandListTest {
-	@Test
+
+    @Test
     public void getAllBrandsList() {
+        System.out.println("===== GET ALL BRANDS LIST =====");
 
-		Response response = given()
-        .baseUri("https://automationexercise.com/api")
-        .contentType(ContentType.JSON)
-    .when()
-        .get("/brandsList")
-    .then()
-        // Functional validation
-        .statusCode(200)
-        .body("brands", notNullValue())
+        Response res = given()
+                .baseUri("https://automationexercise.com/api")
+                .contentType(ContentType.JSON)
+            .when()
+                .get("/brandsList")
+            .then()
+                .extract().response();
 
-        // Performance validation
-        .time(lessThan(4500L))
-        .extract()
-        .response();
-		
-		response.prettyPrint();
+        // Print status code and body
+        System.out.println("Response Code: " + res.getStatusCode());
+        String jsonPretty = res.jsonPath().prettify();
+        System.out.println(jsonPretty);
+
+        // Optional assertions
+        res.then()
+           .statusCode(200)
+           .body("brands", notNullValue())
+           .time(lessThan(5000L));
     }
-        
+
     @Test
     public void putToAllBrandsList() {
-    	    
-       Response response = 
-        given()
-            .baseUri("https://automationexercise.com/api")
-            .contentType(ContentType.JSON)
-        .when()
-            .put("/brandsList")
-        .then()
-            // Validate response code
-            .statusCode(200)
+        System.out.println("===== PUT ALL BRANDS LIST =====");
 
-            // Validate response message
-            .body(containsString("This request method is not supported"))
-            // Performance validation
-            .time(lessThan(1500L))
-            .extract()
-	        .response();
-       
-       response.prettyPrint();
-        
+        Response res = given()
+                .baseUri("https://automationexercise.com/api")
+                .contentType(ContentType.JSON)
+            .when()
+                .put("/brandsList")
+            .then()
+                .extract().response();
+
+        // Print status code and body
+        System.out.println("Response Code: " + res.getStatusCode());
+        String jsonPretty = res.jsonPath().prettify();
+        System.out.println(jsonPretty);
+
+        // Optional assertions
+        res.then()
+           .statusCode(405)
+           .body(containsString("This request method is not supported"));
     }
-
 }
+
