@@ -31,7 +31,7 @@
             <class name="com.automationexercise.tests.TestCase26"/>
             
             <class name="com.apiTesting.BrandListTest"/>
-            <class name="com.apiTesting.ProductListTest"/>
+            <class name="com.apiTesting.ProductsListTest"/>
             <class name="com.apiTesting.SearchProduct"/>
             <class name="com.apiTesting.LoginTest"/>
             <class name="com.apiTesting.OperationsOnAccountTest"/>
