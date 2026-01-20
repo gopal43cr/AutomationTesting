@@ -3,15 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.apiTesting.OperationsOnAccountTest">
+      <class name="com.apiTesting.ProductsListTest">
         <methods>
-          <include name="setup"/>
-          <include name="getUserDetails"/>
-          <include name="deleteUserAccount"/>
-          <include name="updateUserAccount"/>
-          <include name="createUserAccount"/>
+          <include name="getAllProductsList"/>
         </methods>
-      </class> <!-- com.apiTesting.OperationsOnAccountTest -->
+      </class> <!-- com.apiTesting.ProductsListTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -1,9 +1,9 @@
 package com.apiTesting;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import io.restassured.http.ContentType;
@@ -23,16 +23,16 @@ public class ProductsListTest {
             .when()
                 .get("/productsList")
             .then()
-                .extract().response();
+            		.statusCode(200)
+            		.body("brands", notNullValue())
+            		.time(lessThan(5000L))
+            		.extract()
+            		.response();
+
 
         System.out.println("Response Code: " + res.getStatusCode());
         String jsonPretty = res.jsonPath().prettify();
         System.out.println(jsonPretty);
-
-        res.then()
-           .statusCode(200)
-           .body("products", notNullValue())
-           .time(lessThan(5000L));
     }
 
     @Test
@@ -45,14 +45,14 @@ public class ProductsListTest {
             .when()
                 .post("/productsList")
             .then()
-                .extract().response();
+        			.statusCode(200)
+        			.extract()
+        			.response();
 
-        System.out.println("Response Code: " + res.getStatusCode());
-        String jsonPretty = res.jsonPath().prettify();
-        System.out.println(jsonPretty);
-
-        res.then()
-           .statusCode(405)
-           .body(containsString("This request method is not supported"));
-    }
+    System.out.println(res.asPrettyString()); 
+    int responseCode = res.jsonPath().getInt("responseCode"); 
+    String message = res.jsonPath().getString("message"); 
+    Assert.assertEquals(responseCode, 405); 
+    Assert.assertEquals( message, "This request method is not supported." );
+}
 }

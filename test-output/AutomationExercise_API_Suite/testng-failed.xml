@@ -3,18 +3,11 @@
 <suite name="Failed suite [AutomationExercise_API_Suite]">
   <test thread-count="5" name="API Test Execution(failed)">
     <classes>
-      <class name="com.apiTesting.LoginTest">
+      <class name="com.apiTesting.BrandListTest">
         <methods>
-          <include name="postToVerifyLoginWithInvalidDetails"/>
-          <include name="postToVerifyLoginWithoutEmail"/>
-          <include name="deleteVerifyLogin"/>
+          <include name="getAllBrandsList"/>
         </methods>
-      </class> <!-- com.apiTesting.LoginTest -->
-      <class name="com.apiTesting.SearchProduct">
-        <methods>
-          <include name="postToSearchProductWithoutParam"/>
-        </methods>
-      </class> <!-- com.apiTesting.SearchProduct -->
+      </class> <!-- com.apiTesting.BrandListTest -->
     </classes>
   </test> <!-- API Test Execution(failed) -->
 </suite> <!-- Failed suite [AutomationExercise_API_Suite] -->
