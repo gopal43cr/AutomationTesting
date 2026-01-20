@@ -1,7 +1,11 @@
 package com.apiTesting;
 
+
+import org.testng.Assert;
+
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
+
 
 import org.testng.annotations.Test;
 
@@ -11,95 +15,120 @@ import io.restassured.response.Response;
 
 public class LoginTest {
 
-    // API 7: POST To Verify Login with valid details
+    private static final String BASE_URI = "https://automationexercise.com/api";
+
+    // ---------- API 7 ----------
+    // POST: Verify Login with VALID details
     @Test
-    public void postToVerifyLoginWithValidDetails() {
+    public void verifyLoginWithValidDetails() {
+
         System.out.println("===== VERIFY LOGIN WITH VALID DETAILS =====");
 
         Response res =
             RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
+                .baseUri(BASE_URI)
                 .contentType(ContentType.URLENC)
                 .formParam("email", "harshikasingh0312@gmail.com")
                 .formParam("password", "Harshika26")
             .when()
                 .post("/verifyLogin")
             .then()
-                .extract().response();
+                .statusCode(200)
+                .extract()
+                .response();
 
-        System.out.println("Response Code: " + res.getStatusCode());
-        System.out.println(res.jsonPath().prettify());
+        System.out.println(res.asPrettyString());
 
-        res.then()
-           .statusCode(200)
-           .body(notNullValue());
+        int responseCode = res.jsonPath().getInt("responseCode");
+        String message = res.jsonPath().getString("message");
+
+        Assert.assertEquals(responseCode, 200);
+        Assert.assertEquals(message, "User exists!");
     }
 
-    // API 8: POST To Verify Login without email parameter
+    // ---------- API 10 ----------
+    // POST: Verify Login with INVALID details
     @Test
-    public void postToVerifyLoginWithoutEmail() {
-        System.out.println("===== VERIFY LOGIN WITHOUT EMAIL =====");
+    public void verifyLoginWithInvalidDetails() {
 
-        Response res =
-            RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
-                .contentType(ContentType.URLENC)
-                .formParam("password", "test123")
-            .when()
-                .post("/verifyLogin")
-            .then()
-                .extract().response();
-
-        System.out.println("Response Code: " + res.getStatusCode());
-        System.out.println(res.jsonPath().prettify());
-
-        res.then()
-           .statusCode(400)
-           .body(notNullValue());
-    }
-
-    // API 9: DELETE To Verify Login
-    @Test
-    public void deleteVerifyLogin() {
-        System.out.println("===== DELETE VERIFY LOGIN =====");
-
-        Response res =
-            RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
-            .when()
-                .delete("/verifyLogin")
-            .then()
-                .extract().response();
-
-        System.out.println("Response Code: " + res.getStatusCode());
-        System.out.println(res.jsonPath().prettify());
-
-        res.then()
-           .statusCode(405)
-           .body(notNullValue());
-    }
-
-    // API 10: POST To Verify Login with invalid details
-    @Test
-    public void postToVerifyLoginWithInvalidDetails() {
         System.out.println("===== VERIFY LOGIN WITH INVALID DETAILS =====");
 
         Response res =
             RestAssured.given()
-                .baseUri("https://automationexercise.com/api")
+                .baseUri(BASE_URI)
                 .contentType(ContentType.URLENC)
                 .formParam("email", "invalid@example.com")
                 .formParam("password", "wrongpass")
             .when()
                 .post("/verifyLogin")
             .then()
-                .extract().response();
+                .statusCode(200)
+                .extract()
+                .response();
 
-        System.out.println("Response Code: " + res.getStatusCode());
-        System.out.println(res.jsonPath().prettify());
+        System.out.println(res.asPrettyString());
 
-        res.then()
-           .statusCode(404)
-           .body(notNullValue());
+        int responseCode = res.jsonPath().getInt("responseCode");
+        String message = res.jsonPath().getString("message");
+
+        Assert.assertEquals(responseCode, 404);
+        Assert.assertEquals(message, "User not found!");
+    }
+
+    // ---------- API 8 ----------
+    // POST: Verify Login WITHOUT email
+    @Test
+    public void verifyLoginWithoutEmail() {
+
+        System.out.println("===== VERIFY LOGIN WITHOUT EMAIL =====");
+
+        Response res =
+            RestAssured.given()
+                .baseUri(BASE_URI)
+                .contentType(ContentType.URLENC)
+                .formParam("password", "test123")
+            .when()
+                .post("/verifyLogin")
+            .then()
+                .statusCode(200)
+                .extract()
+                .response();
+
+        System.out.println(res.asPrettyString());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+        String message = res.jsonPath().getString("message");
+
+        Assert.assertEquals(responseCode, 400);
+        Assert.assertEquals(
+            message,
+            "Bad request, email or password parameter is missing in POST request."
+        );
+    }
+
+    // ---------- API 9 ----------
+    // DELETE: Verify Login
+    @Test
+    public void deleteVerifyLogin() {
+
+        System.out.println("===== DELETE VERIFY LOGIN =====");
+
+        Response res =
+            RestAssured.given()
+                .baseUri(BASE_URI)
+            .when()
+                .delete("/verifyLogin")
+            .then()
+                .statusCode(200)
+                .extract()
+                .response();
+
+        System.out.println(res.asPrettyString());
+
+        int responseCode = res.jsonPath().getInt("responseCode");
+        String message = res.jsonPath().getString("message");
+
+        Assert.assertEquals(responseCode, 405);
+        Assert.assertEquals(message, "This request method is not supported.");
     }
 }

@@ -13,7 +13,7 @@ import io.restassured.response.Response;
 
 public class OperationsOnAccountTest {
 
-    String email = "johndoe123@example.com";
+    String email = "johndoe1239@example.com";
     String password = "Test@1234";
 
     @BeforeClass

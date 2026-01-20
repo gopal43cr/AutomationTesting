@@ -1,11 +1,11 @@
 package com.apiTesting;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 import io.restassured.response.Response;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import io.restassured.http.ContentType;
@@ -23,18 +23,21 @@ public class BrandListTest {
             .when()
                 .get("/brandsList")
             .then()
-                .extract().response();
+            		.statusCode(200)
+            		.body("brands", notNullValue())
+                .time(lessThan(2000L))
+                .extract()
+                .response();
 
         // Print status code and body
         System.out.println("Response Code: " + res.getStatusCode());
         String jsonPretty = res.jsonPath().prettify();
         System.out.println(jsonPretty);
 
-        // Optional assertions
-        res.then()
-           .statusCode(200)
-           .body("brands", notNullValue())
-           .time(lessThan(5000L));
+//        // Optional assertions
+//        res.then()
+           
+           
     }
 
     @Test
@@ -47,17 +50,14 @@ public class BrandListTest {
             .when()
                 .put("/brandsList")
             .then()
-                .extract().response();
+            		.statusCode(200)
+                .extract()
+                .response();
 
-        // Print status code and body
-        System.out.println("Response Code: " + res.getStatusCode());
-        String jsonPretty = res.jsonPath().prettify();
-        System.out.println(jsonPretty);
-
-        // Optional assertions
-        res.then()
-           .statusCode(405)
-           .body(containsString("This request method is not supported"));
+        System.out.println(res.asPrettyString()); 
+        int responseCode = res.jsonPath().getInt("responseCode"); 
+        String message = res.jsonPath().getString("message"); 
+        Assert.assertEquals(responseCode, 405); 
+        Assert.assertEquals( message, "This request method is not supported." );
     }
 }
-
