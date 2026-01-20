@@ -6,62 +6,99 @@ import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 public class LoginTest {
 
-    //POST To Verify Login with valid details
+    // API 7: POST To Verify Login with valid details
     @Test
     public void postToVerifyLoginWithValidDetails() {
-        RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITH VALID DETAILS =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("email", "harshikasingh0312@gmail.com")
                 .formParam("password", "Harshika26")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(200)
-                .body(notNullValue()); // message: User exists!
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(200)
+           .body(notNullValue());
     }
 
-    // POST To Verify Login without email parameter
+    // API 8: POST To Verify Login without email parameter
     @Test
     public void postToVerifyLoginWithoutEmail() {
-        RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITHOUT EMAIL =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("password", "test123")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(400)
-                .body(notNullValue()); // message: Bad request, email or password missing
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(400)
+           .body(notNullValue());
     }
 
-    // DELETE To Verify Login
+    // API 9: DELETE To Verify Login
     @Test
     public void deleteVerifyLogin() {
-        RestAssured.given()
+        System.out.println("===== DELETE VERIFY LOGIN =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
-        .when()
+            .when()
                 .delete("/verifyLogin")
-        .then()
-                .statusCode(405)
-                .body(notNullValue()); // message: This request method is not supported
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(405)
+           .body(notNullValue());
     }
 
-    // POST To Verify Login with invalid details
+    // API 10: POST To Verify Login with invalid details
     @Test
     public void postToVerifyLoginWithInvalidDetails() {
-        RestAssured.given()
+        System.out.println("===== VERIFY LOGIN WITH INVALID DETAILS =====");
+
+        Response res =
+            RestAssured.given()
                 .baseUri("https://automationexercise.com/api")
                 .contentType(ContentType.URLENC)
                 .formParam("email", "invalid@example.com")
                 .formParam("password", "wrongpass")
-        .when()
+            .when()
                 .post("/verifyLogin")
-        .then()
-                .statusCode(404)
-                .body(notNullValue()); // message: User not found
+            .then()
+                .extract().response();
+
+        System.out.println("Response Code: " + res.getStatusCode());
+        System.out.println(res.jsonPath().prettify());
+
+        res.then()
+           .statusCode(404)
+           .body(notNullValue());
     }
 }
