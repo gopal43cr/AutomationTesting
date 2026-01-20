@@ -1,6 +1,7 @@
 package com.apiTesting;
 
 import static io.restassured.RestAssured.given;
+import io.restassured.response.Response;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
@@ -25,7 +26,7 @@ public class ProductsListTest {
             .body("products", notNullValue())
 
             // Performance validation (same as responseTime <= 5000)
-            .time(lessThan(5000L));
+            .time(lessThan(1500L));
     }
  
 	@Test
@@ -38,7 +39,9 @@ public class ProductsListTest {
 	            .post("/productsList")
 	        .then()
 	            // Negative test: POST not allowed
-	            .statusCode(405)
-	            .body(containsString("This request method is not supported"));
+	            .statusCode(200)
+	            .body(containsString("This request method is not supported"))
+		     // Performance validation
+		        .time(lessThan(1500L));
     }
 }

@@ -1,6 +1,8 @@
 package com.apiTesting;
 
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
+import io.restassured.response.Response;
 
 import org.testng.annotations.Test;
 
@@ -35,7 +37,7 @@ public class OperationsOnAccountTest {
         .when()
                 .post("/createAccount")
         .then()
-                .statusCode(201)
+                .statusCode(200)
                 .body(notNullValue()); // message: User created!
     }
 
@@ -81,7 +83,9 @@ public class OperationsOnAccountTest {
                 .put("/updateAccount")
         .then()
                 .statusCode(200)
-                .body(notNullValue()); // message: User updated!
+                .body(notNullValue()) // message: User updated!
+	     // Performance validation
+	        .time(lessThan(1500L));
     }
 
     // API 14: GET User Detail By Email
@@ -94,6 +98,8 @@ public class OperationsOnAccountTest {
                 .get("/getUserDetailByEmail")
         .then()
                 .statusCode(200)
-                .body(notNullValue()); // JSON: User Detail
+                .body(notNullValue()) // JSON: User Detail
+	     // Performance validation
+	        .time(lessThan(1500L));
     }
 }

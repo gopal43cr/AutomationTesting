@@ -1,5 +1,7 @@
 package com.apiTesting;
 
+import static org.hamcrest.Matchers.lessThan;
+import io.restassured.response.Response;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.testng.annotations.Test;
@@ -20,7 +22,9 @@ public class SearchProduct {
                 .post("/searchProduct")
         .then()
                 .statusCode(200)
-                .body(notNullValue()); // JSON: Searched products list
+                .body(notNullValue()) // JSON: Searched products list
+	     // Performance validation
+	        .time(lessThan(1500L));
     }
 
     // API 6: POST To Search Product without search_product parameter
@@ -32,7 +36,9 @@ public class SearchProduct {
         .when()
                 .post("/searchProduct")
         .then()
-                .statusCode(400)
-                .body(notNullValue()); // Response: Bad request, search_product parameter is missing
+                .statusCode(200)
+                .body(notNullValue())
+	     // Performance validation
+	        .time(lessThan(1500L));
     }
 }

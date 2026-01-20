@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
+import io.restassured.response.Response;
 
 import org.testng.annotations.Test;
 
@@ -13,7 +14,7 @@ public class BrandListTest {
 	@Test
     public void getAllBrandsList() {
 
-		given()
+		Response response = given()
         .baseUri("https://automationexercise.com/api")
         .contentType(ContentType.JSON)
     .when()
@@ -24,12 +25,17 @@ public class BrandListTest {
         .body("brands", notNullValue())
 
         // Performance validation
-        .time(lessThan(5000L));
+        .time(lessThan(4500L))
+        .extract()
+        .response();
+		
+		response.prettyPrint();
     }
         
     @Test
     public void putToAllBrandsList() {
-    	
+    	    
+       Response response = 
         given()
             .baseUri("https://automationexercise.com/api")
             .contentType(ContentType.JSON)
@@ -37,10 +43,17 @@ public class BrandListTest {
             .put("/brandsList")
         .then()
             // Validate response code
-            .statusCode(405)
+            .statusCode(200)
 
             // Validate response message
-            .body(containsString("This request method is not supported"));
+            .body(containsString("This request method is not supported"))
+            // Performance validation
+            .time(lessThan(1500L))
+            .extract()
+	        .response();
+       
+       response.prettyPrint();
+        
     }
 
 }

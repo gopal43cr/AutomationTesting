@@ -1,4 +1,4 @@
-package com.automationexercise.cucumber.stepdefinations;
+package com.bdd.stepDefinations;
 
 import java.io.IOException;
 
@@ -56,6 +56,7 @@ public class LogoutSteps extends TestBasic {
                 JSONReader.existingUser("email"),
                 JSONReader.existingUser("password")
         );
+		
 	}
 
 	@Then("user should be logged in")

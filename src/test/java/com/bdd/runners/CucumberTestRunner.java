@@ -1,4 +1,4 @@
-package com.automationexercise.cucumber.runners;
+package com.bdd.runners;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
@@ -6,8 +6,8 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
 		glue = {
-                "com.automationexercise.cucumber.stepdefinations",
-                "com.automationexercise.cucumber.hooks"
+                "com.bdd.stepDefinations",
+                "com.bdd.hooks"
         },
         plugin = {
                 "pretty",

@@ -1,4 +1,4 @@
-package com.automationexercise.cucumber.hooks;
+package com.bdd.hooks;
 
 import java.io.IOException;
 
