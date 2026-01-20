@@ -3,6 +3,7 @@ package com.apiTesting;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
+import io.restassured.response.Response;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

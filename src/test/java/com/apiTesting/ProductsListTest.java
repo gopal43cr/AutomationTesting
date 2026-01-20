@@ -1,5 +1,9 @@
 package com.apiTesting;
 
+import static io.restassured.RestAssured.given;
+import io.restassured.response.Response;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 

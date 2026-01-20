@@ -1,6 +1,12 @@
 package com.apiTesting;
 
+
 import org.testng.Assert;
+
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
+
+
 import org.testng.annotations.Test;
 
 import io.restassured.RestAssured;
