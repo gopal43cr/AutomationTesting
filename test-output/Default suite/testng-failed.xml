@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.automationexercise.tests.TestCase1">
+      <class name="com.bdd.runners.CucumberTestRunner">
         <methods>
-          <include name="setup"/>
-          <include name="tearDown"/>
-          <include name="registerUser"/>
+          <include name="setUpClass"/>
+          <include name="runScenario" invocation-numbers="0 1"/>
+          <include name="tearDownClass"/>
         </methods>
-      </class> <!-- com.automationexercise.tests.TestCase1 -->
+      </class> <!-- com.bdd.runners.CucumberTestRunner -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

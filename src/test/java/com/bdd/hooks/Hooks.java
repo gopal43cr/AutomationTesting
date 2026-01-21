@@ -12,6 +12,8 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
 public class Hooks extends TestBasic {
+	
+	public static WebDriver driver;
 
     @Before
     public void setUp() throws IOException {
